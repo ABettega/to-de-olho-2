@@ -1,0 +1,39 @@
+{
+  "name": "to-de-olho-2",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./src/app.js",
+  "scripts": {
+    "start": "pm2 start ./src/app.js --name to-de-olho-2",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "infra:up": "docker-compose --env-file ./config/.env.local --profile infra up --detach",
+    "infra:down": "docker-compose --profile infra down --volumes",
+    "stop": "pm2 stop to-de-olho-2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ABettega/to-de-olho-2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ABettega/to-de-olho-2/issues"
+  },
+  "homepage": "https://github.com/ABettega/to-de-olho-2#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "morgan": "^1.10.0",
+    "pino": "^8.16.1",
+    "pino-pretty": "^10.2.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.52.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0"
+  }
+}

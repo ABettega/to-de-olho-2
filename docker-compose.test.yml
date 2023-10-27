@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./.docker/test/Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres
+    ports:
+      - 5001:5432
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - PGUSER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data:rw
+      - ./config/sql/:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 15s
+
+volumes:
+  pgdata:
