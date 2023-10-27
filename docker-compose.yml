@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./.docker/app/Dockerfile
+    environment:
+      NODE_ENV: ${NODE_ENV:-local}
+      PORT: ${PORT:-3000}
+      # DB_HOST: postgres_database
+      # DB_PORT: ${POSTGRES_PORT}
+      # DB_USERNAME: ${POSTGRES_USER}
+      # DB_PASSWORD: ${POSTGRES_PASSWORD}
+      # DB_DATABASE: ${POSTGRES_DB}
+      SALT: ${SALT:-salt_test}
+    ports:
+      - 3000:3000
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    image: mysql
+    ports:
+      - 3307:3306
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ./config/sql/:/docker-entrypoint-initdb.d/
+    healthcheck:
+        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+        timeout: 20s
+        retries: 10
